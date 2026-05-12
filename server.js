@@ -4,6 +4,43 @@ import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
 
+// Course data
+const courses = {
+    'CS121': {
+        id: 'CS121',
+        title: 'Introduction to Programming',
+        description: 'Learn programming fundamentals using JavaScript and basic web development concepts.',
+        credits: 3,
+        sections: [
+            { time: '9:00 AM', room: 'STC 392', professor: 'Brother Jack' },
+            { time: '2:00 PM', room: 'STC 394', professor: 'Sister Enkey' },
+            { time: '11:00 AM', room: 'STC 390', professor: 'Brother Keers' }
+        ]
+    },
+    'MATH110': {
+        id: 'MATH110',
+        title: 'College Algebra',
+        description: 'Fundamental algebraic concepts including functions, graphing, and problem solving.',
+        credits: 4,
+        sections: [
+            { time: '8:00 AM', room: 'MC 301', professor: 'Sister Anderson' },
+            { time: '1:00 PM', room: 'MC 305', professor: 'Brother Miller' },
+            { time: '3:00 PM', room: 'MC 307', professor: 'Brother Thompson' }
+        ]
+    },
+    'ENG101': {
+        id: 'ENG101',
+        title: 'Academic Writing',
+        description: 'Develop writing skills for academic and professional communication.',
+        credits: 3,
+        sections: [
+            { time: '10:00 AM', room: 'GEB 201', professor: 'Sister Anderson' },
+            { time: '12:00 PM', room: 'GEB 205', professor: 'Brother Davis' },
+            { time: '4:00 PM', room: 'GEB 203', professor: 'Sister Enkey' }
+        ]
+    }
+};
+
 /**
  * Declare Important Variables
  */
@@ -90,6 +127,66 @@ app.get("/search/:category", (req, res) => {
         <p><strong>Minimum Price:</strong> ${minPrice}</p>
         <p><strong>Sory By:</stron> ${sort}</p>
         `);
+});
+
+// Course catalog page
+app.get("/catalong", (req, res) => {
+    res.render("catalog", {
+        title: "Course Catalog",
+        courses: courses
+    });
+});
+
+// Course detail page 
+app.get('/catalog/:courseId', (req, res) => {
+    // Route param
+    const courseId = req.params.courseId;
+    // Find course
+    const course = courses[courseId];
+    // Handle invalid course ID
+    if (!course) {
+        const err = new Error(`Course ${courseId} not found`);
+        err.status = 404;
+        return next(err);
+    }
+
+    // Query param
+    const sortBy = req.query.sort || "time";
+
+    // Copy sections
+    let sortedSections = [...course.sections];
+
+    // Sort sections
+    switch (sortBy) {
+        case "professor":
+            sortedSections.sort((a, b) =>
+                a.professor.localCompare(b.professor)
+            );
+            break;
+
+        case "room":
+            sortedSections.sort((a, b) =>
+                a.room.localCompare(b.room)
+            );
+            break;
+
+        case "time":
+            default:
+                break;
+    }
+
+    // Log the parameter for debugging
+    console.log(`Viewing course: ${courseId}, sorted by: ${sortBy}`);
+    // Render the course detail template
+    res.render('course-detail', {
+        title: `${course.id} - ${course.title}`,
+        course: {
+            ...course,
+            sections: sortedSections
+        },
+
+        currentSort: sortBy
+    });
 });
 
 /**
