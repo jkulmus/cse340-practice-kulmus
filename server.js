@@ -8,6 +8,7 @@ import { fileURLToPath } from "url";
  * Declare Important Variables
  */
 const PORT = process.env.PORT || 3000;
+const NODE_ENV = process.env.NODE_ENV || "development";
 
  // Corret for ES Modules
 const __filename = fileURLToPath(import.meta.url);
@@ -58,34 +59,74 @@ const courses = {
 const app = express();
 
 /**
- * Configure Express middleware
+ * Configure Express Middleware
  */
 
 // Serve static files
 app.use(express.static(path.join(__dirname, "public")));
 
-// Set EJS as view engine
+// View engine
 app.set("view engine", "ejs");
-
-// Set views directory
 app.set("views", path.join(__dirname, "src/views"));
 
 /**
  * Global Middleware
  */
 
-// Global request logger middleware
+// Middleware to make NODE_ENV available to templates
 app.use((req, res, next) => {
-    const timestamp = new Date().toISOString();
-
-    console.log(`[${timestamp}] ${req.method} ${req.url}`);
-
+    res.locals.NODE_ENV = NODE_ENV.toLocaleLowerCase() || "production";
     next();
 });
 
-// Global middleware example using res.locals
+// Request logger middleware
 app.use((req, res, next) => {
-    res.locals.timestamp = new Date().toISOString();
+    // skip hidden /. routes
+    if (!req.path.startsWith("/")) {
+        console.log(`${req.method} ${req.url}`);
+    }
+    next();
+});
+
+// Middleware for current year
+app.use((req, res, next) => {
+    res.locals.currentYear = new Date().getFullYear();
+    next();
+});
+
+// Middleware for timestamp
+app.use((req, res, next) => {
+    res.locals.timestamp = new Date().toDateString();
+    next();
+});
+
+// Time-based greeting middleware
+app.use((req, res, next) => {
+    const currentHour = new Date().getHours();
+
+    if (currentHour < 12) {
+        res.locals.greeting = "<p>Good Morning!</p>";
+    } else if (currentHour < 18) {
+        res.locals.greeting = "<p>Good Afternoon!</p>";
+    } else {
+        res.locals.greeting = "<p>Good Evening!</p>";
+    }
+    next();
+});
+
+// Random theme middleware
+app.use((req, res, next) => {
+    const themes = ["blue-theme", "green-theme", "red-theme"];
+
+    const randomTheme =
+        themes[Math.floor(Math.random() * themes.length)];
+    res.locals.bodyClass = randomTheme;
+    next();
+});
+
+// Query parameter middleware
+app.use((req, res, next) => {
+    res.locals.queryParams = req.query || {};
     next();
 });
 
@@ -93,14 +134,25 @@ app.use((req, res, next) => {
  * Route-Specific Middleware
  */
 
-// Middleware for visitor count example
+// Visit Count middleware
 const addVisitCount = (req, res, next) => {
     res.locals.visitCount = 41;
     next();
 };
 
+// Demo header middleware
+const addDemoHeaders = (req, res, next) => {
+    res.setHeader("X-Demo-Page", "true");
+
+    res.setHeader(
+        "X-Middleware-Demo",
+        "Middleware is working successfully!"
+    );
+    next();
+};
+
 /**
- * Declare Routes
+ * Routes
  */
 
 // Home
@@ -120,9 +172,9 @@ app.get("/products", (req, res) => {
 
 // Student
 app.get("/student", (req, res) => {
-    const studentId = {
-        name: "Student Name",
-        id: studentId,
+    const student = {
+        name: "Jacquelyn Kulmus",
+        id: "123456",
         email: "name@example.com",
         address: "123 University Way"
     };
@@ -133,12 +185,16 @@ app.get("/student", (req, res) => {
     });
 });
 
-/**
- * Query Parameter Example
- */
+// Welcome route using route-specific middleware
+app.get("/welcome", addVisitCount, (req, res) => {
+    res.send(`
+        <h1>Welcome!</h1>
+        <p>Timestand: ${res.locals.timestamp}</p>
+        <p>Visit Count: ${res.locals.visitCount}</p>
+    `);
+});
 
-// Example:
-// /search/headphones?minPrice=50&sort=rating
+// Search route w/route + query params
 app.get("/search/:category", (req, res) => {
     const category = req.params.category;
 
@@ -153,18 +209,6 @@ app.get("/search/:category", (req, res) => {
         <p>Brand: ${brand}</p>
         <p>Minimum Price: ${minPrice}</p>
         <p>Sory By: ${sort}</p>
-        `);
-});
-
-/**
- * Middleware Example Route
- */
-
-app.get("/welcome", addVisitCount, (req, res) => {
-    res.send(`
-        <h1>Welcome!</h1>
-        <p>Timestand: ${res.locals.timestamp}</p>
-        <p>Visit Count: ${res.locals.visitCount}</p>
     `);
 });
 
@@ -180,8 +224,8 @@ app.get("/catalong", (req, res) => {
     });
 });
 
-// Course detail page w/ route  & query param sorting
-app.get('/catalog/:courseId', (req, res) => {
+// Course detail page
+app.get('/catalog/:courseId', (req, res, next) => {
     const courseId = req.params.courseId;
 
     const course = courses[courseId];
@@ -196,7 +240,6 @@ app.get('/catalog/:courseId', (req, res) => {
     // Query param
     const sortBy = req.query.sort || "time";
 
-    // Copy sections before sorting
     let sortedSections = [...course.sections];
 
     switch (sortBy) {
@@ -225,8 +268,17 @@ app.get('/catalog/:courseId', (req, res) => {
             ...course,
             sections: sortedSections
         },
-
         currentSort: sortBy
+    });
+});
+
+/**
+ * Demo Page
+ */
+
+app.get("/demo", addDemoHeaders, (req, res) => {
+    res.render("demo", {
+        title: "Middleware Demo Page"
     });
 });
 
@@ -243,7 +295,7 @@ app.get("/test-error", (req, res, next) => {
 });
 
 /**
- * 404 Catch-All Middleware
+ * 404 Catch-All
  */
 
 app.use((req, res, next) => {
@@ -292,9 +344,10 @@ app.use((err, req, res, next) => {
         console.error("Error rendering template:", renderErr.message);
 
         if (!res.headersSent) {
-            res
-                .status(status)
-                .send(`<h1>Error ${status}</h1><p>An error occurred</p>`);
+            res.status(status).send(`
+                <h1>Error ${status}</h1>
+                <p>An error occurred</p>
+            `);
         }
     }
 });
