@@ -10,7 +10,7 @@ import { fileURLToPath } from "url";
 const PORT = process.env.PORT || 3000;
 const NODE_ENV = process.env.NODE_ENV || "development";
 
- // Corret for ES Modules
+// Correct for ES Modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -75,14 +75,14 @@ app.set("views", path.join(__dirname, "src/views"));
 
 // Middleware to make NODE_ENV available to templates
 app.use((req, res, next) => {
-    res.locals.NODE_ENV = NODE_ENV.toLocaleLowerCase() || "production";
+    res.locals.NODE_ENV = NODE_ENV.toLowerCase() || "production";
     next();
 });
 
 // Request logger middleware
 app.use((req, res, next) => {
     // skip hidden /. routes
-    if (!req.path.startsWith("/")) {
+    if (!req.path.startsWith("/.")) {
         console.log(`${req.method} ${req.url}`);
     }
     next();
@@ -189,7 +189,7 @@ app.get("/student", (req, res) => {
 app.get("/welcome", addVisitCount, (req, res) => {
     res.send(`
         <h1>Welcome!</h1>
-        <p>Timestand: ${res.locals.timestamp}</p>
+        <p>Timestamp: ${res.locals.timestamp}</p>
         <p>Visit Count: ${res.locals.visitCount}</p>
     `);
 });
@@ -208,7 +208,7 @@ app.get("/search/:category", (req, res) => {
         <p>Category: ${category}<p>
         <p>Brand: ${brand}</p>
         <p>Minimum Price: ${minPrice}</p>
-        <p>Sory By: ${sort}</p>
+        <p>Sort By: ${sort}</p>
     `);
 });
 
@@ -217,7 +217,7 @@ app.get("/search/:category", (req, res) => {
  */
 
 // Catalog page
-app.get("/catalong", (req, res) => {
+app.get("/catalog", (req, res) => {
     res.render("catalog", {
         title: "Course Catalog",
         courses: courses
@@ -245,13 +245,13 @@ app.get('/catalog/:courseId', (req, res, next) => {
     switch (sortBy) {
         case "professor":
             sortedSections.sort((a, b) =>
-                a.professor.localCompare(b.professor)
+                a.professor.localeCompare(b.professor)
             );
             break;
 
         case "room":
             sortedSections.sort((a, b) =>
-                a.room.localCompare(b.room)
+                a.room.localeCompare(b.room)
             );
             break;
 
@@ -326,7 +326,7 @@ app.use((err, req, res, next) => {
     const template = status === 404 ? "404" : "500";
 
     const context = {
-        title: status === 400 ? "Page Not Found" : "Server Error",
+        title: status === 404 ? "Page Not Found" : "Server Error",
         error: 
             NODE_ENV === "production"
                 ? "An error occured"

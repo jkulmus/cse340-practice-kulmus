@@ -6,7 +6,7 @@
     <p> Browse available courses and click a course to view detailed information</p>
 
     <div class="course-list">
-        <% Object.values(course).forEach(course => { %>
+        <% Object.values(courses).forEach(course => { %>
             <div class="course-card">
                 <h3>
                     <a href="/catalog/<%= course.id %>">
