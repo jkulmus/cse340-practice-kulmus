@@ -1,5 +1,4 @@
 // Imports
-import { NODATA } from "dns";
 import "dotenv/config";
 import express from "express";
 import path from "path";
@@ -53,9 +52,9 @@ app.get("/products", (req, res) => {
 
 // Student
 app.get("/student", (req, res) => {
-    const student = {
+    const studentId = {
         name: "Student Name",
-        id: "123456",
+        id: studentId,
         email: "name@example.com",
         address: "123 University Way"
     };
@@ -64,6 +63,33 @@ app.get("/student", (req, res) => {
         title: "Student Profile",
         student
     });
+});
+
+/**
+ * Search Route Example
+ * Route Param + Query Param demo
+ * Example:
+ * /search/laptop
+ * /search/phones?brand=apple
+ * /search/headphones?minPrice=50&sort=rating
+ */
+app.get("/search/:category", (req, res) => {
+    // Route param
+    const category = req.params.category;
+
+    // Query param w/defaults
+    const brand = req.query.brand || "any brand";
+    const minPrice = req.query.minPrice || "0";
+    const sort = req.query.sort || "price";
+
+    // Send response
+    res.send(`
+        <h1>Search Results</h1>
+        <p><strong>Category:<strong> ${category}<p>
+        <p><strong>Brand:</strong> ${brand}</p>
+        <p><strong>Minimum Price:</strong> ${minPrice}</p>
+        <p><strong>Sory By:</stron> ${sort}</p>
+        `);
 });
 
 /**
