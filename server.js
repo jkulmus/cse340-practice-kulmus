@@ -4,7 +4,18 @@ import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
 
-// Course data
+/**
+ * Declare Important Variables
+ */
+const PORT = process.env.PORT || 3000;
+
+ // Corret for ES Modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+/**
+ * Course data
+ */
 const courses = {
     'CS121': {
         id: 'CS121',
@@ -42,15 +53,6 @@ const courses = {
 };
 
 /**
- * Declare Important Variables
- */
-const PORT = process.env.PORT || 3000;
-
- // Corret for ES Modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-/**
  * Setup Express Server
  */
 const app = express();
@@ -67,6 +69,35 @@ app.set("view engine", "ejs");
 
 // Set views directory
 app.set("views", path.join(__dirname, "src/views"));
+
+/**
+ * Global Middleware
+ */
+
+// Global request logger middleware
+app.use((req, res, next) => {
+    const timestamp = new Date().toISOString();
+
+    console.log(`[${timestamp}] ${req.method} ${req.url}`);
+
+    next();
+});
+
+// Global middleware example using res.locals
+app.use((req, res, next) => {
+    res.locals.timestamp = new Date().toISOString();
+    next();
+});
+
+/**
+ * Route-Specific Middleware
+ */
+
+// Middleware for visitor count example
+const addVisitCount = (req, res, next) => {
+    res.locals.visitCount = 41;
+    next();
+};
 
 /**
  * Declare Routes
@@ -103,33 +134,45 @@ app.get("/student", (req, res) => {
 });
 
 /**
- * Search Route Example
- * Route Param + Query Param demo
- * Example:
- * /search/laptop
- * /search/phones?brand=apple
- * /search/headphones?minPrice=50&sort=rating
+ * Query Parameter Example
  */
+
+// Example:
+// /search/headphones?minPrice=50&sort=rating
 app.get("/search/:category", (req, res) => {
-    // Route param
     const category = req.params.category;
 
-    // Query param w/defaults
-    const brand = req.query.brand || "any brand";
+    const brand = req.query.brand || "Any Brand";
     const minPrice = req.query.minPrice || "0";
     const sort = req.query.sort || "price";
 
     // Send response
     res.send(`
-        <h1>Search Results</h1>
-        <p><strong>Category:<strong> ${category}<p>
-        <p><strong>Brand:</strong> ${brand}</p>
-        <p><strong>Minimum Price:</strong> ${minPrice}</p>
-        <p><strong>Sory By:</stron> ${sort}</p>
+        <h1>Product Search</h1>
+        <p>Category: ${category}<p>
+        <p>Brand: ${brand}</p>
+        <p>Minimum Price: ${minPrice}</p>
+        <p>Sory By: ${sort}</p>
         `);
 });
 
-// Course catalog page
+/**
+ * Middleware Example Route
+ */
+
+app.get("/welcome", addVisitCount, (req, res) => {
+    res.send(`
+        <h1>Welcome!</h1>
+        <p>Timestand: ${res.locals.timestamp}</p>
+        <p>Visit Count: ${res.locals.visitCount}</p>
+    `);
+});
+
+/**
+ * Course Catalog Routes
+ */
+
+// Catalog page
 app.get("/catalong", (req, res) => {
     res.render("catalog", {
         title: "Course Catalog",
@@ -137,13 +180,13 @@ app.get("/catalong", (req, res) => {
     });
 });
 
-// Course detail page 
+// Course detail page w/ route  & query param sorting
 app.get('/catalog/:courseId', (req, res) => {
-    // Route param
     const courseId = req.params.courseId;
-    // Find course
+
     const course = courses[courseId];
-    // Handle invalid course ID
+
+    // Handle invalid course
     if (!course) {
         const err = new Error(`Course ${courseId} not found`);
         err.status = 404;
@@ -153,10 +196,9 @@ app.get('/catalog/:courseId', (req, res) => {
     // Query param
     const sortBy = req.query.sort || "time";
 
-    // Copy sections
+    // Copy sections before sorting
     let sortedSections = [...course.sections];
 
-    // Sort sections
     switch (sortBy) {
         case "professor":
             sortedSections.sort((a, b) =>
@@ -175,9 +217,8 @@ app.get('/catalog/:courseId', (req, res) => {
                 break;
     }
 
-    // Log the parameter for debugging
     console.log(`Viewing course: ${courseId}, sorted by: ${sortBy}`);
-    // Render the course detail template
+
     res.render('course-detail', {
         title: `${course.id} - ${course.title}`,
         course: {
@@ -190,8 +231,9 @@ app.get('/catalog/:courseId', (req, res) => {
 });
 
 /**
- * Test Route for 500 Errors
+ * Test Error Route
  */
+
 app.get("/test-error", (req, res, next) => {
     const err = new Error("This is a test error");
 
@@ -201,9 +243,9 @@ app.get("/test-error", (req, res, next) => {
 });
 
 /**
- * Catch-All Route 404 Errors
- * Comes AFTER all valid routes
+ * 404 Catch-All Middleware
  */
+
 app.use((req, res, next) => {
     const err = new Error("Page Not Found");
 
@@ -216,48 +258,43 @@ app.use((req, res, next) => {
  * Global Error Handler
  * MUST come LAST
  */
-app.use((err, req, res, next) => {
 
+app.use((err, req, res, next) => {
     // Prevent duplicate responses
     if (res.headersSent || res.finished) {
         return next(err);
     }
 
-    // Determine status code
+    // Log error
+    console.error("Error occurred:", err.message);
+    console.error(err.stack);
+
     const status = err.status || 500;
 
-    // Choose correct template
     const template = status === 404 ? "404" : "500";
 
-    // Create context object for EJS templates
     const context = {
-        title: status === 400
-            ? "Page Not Found"
-            : "Server Error",
-        
-        error: process.env.NODE_ENV === "production"
-            ? "An error occured"
-            : err.message,
-
-        stack: process.env.NODE_ENV === "production"
-            ? null
-            : err.stack,
-
-        NODE_ENV: process.env.NODE_ENV
+        title: status === 400 ? "Page Not Found" : "Server Error",
+        error: 
+            NODE_ENV === "production"
+                ? "An error occured"
+                : err.message,
+        stack:
+            NODE_ENV === "production"
+                ? null
+                : err.stack,
+        NODE_ENV
     };
 
     try {
-
-        // Render apporpriate error page
         res.status(status).render(`errors/${template}`, context);
     } catch (renderErr) {
+        console.error("Error rendering template:", renderErr.message);
 
-        // fallback if rendering fails
         if (!res.headersSent) {
-            res.status(status).send(`
-                <h1>Error ${status}</h1>
-                <p>An error occured</p>
-            `);
+            res
+                .status(status)
+                .send(`<h1>Error ${status}</h1><p>An error occurred</p>`);
         }
     }
 });
