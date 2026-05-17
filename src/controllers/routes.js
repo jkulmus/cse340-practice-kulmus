@@ -1,59 +1,50 @@
-import {
-Router
-}
-from 'express';
+import { Router } from 'express';
+import { addDemoHeaders } from '../middleware/demo/headers.js';
 
-import {
-homePage,
-aboutPage,
-demoPage,
-studentPage
-}
-from './index.js';
+import { catalogPage, courseDetailPage } from './catalog/catalog.js';
+import { 
+    facultyListPage, 
+    facultyDetailPage 
+} 
+from './faculty/faculty.js';
 
-import {
-catalogPage,
-courseDetailPage
-}
-from './catalog/catalog.js';
+import { 
+    homePage, 
+    aboutPage, 
+    demoPage, 
+    studentPage,
+    testErrorPage 
+} from './index.js';
 
-import {
-addDemoHeaders
-}
-from '../middleware/demo/headers.js';
+const router = Router();
 
-const router =
-Router();
+/**
+ * Home / Static 
+ */
+router.get('/', homePage);
+router.get('/about', aboutPage);
+router.get('/student', studentPage);
 
-router.get(
-'/',
-homePage
-);
+/**
+ * Catalog
+ */
+router.get('/catalog', catalogPage);
+router.get('/catalog/:courseId', courseDetailPage);
 
-router.get(
-'/about',
-aboutPage
-);
+/**
+ * Faculty
+ */
+router.get('/faculty', facultyListPage);
+router.get('/faculty/:facultyId', facultyDetailPage);
 
-router.get(
-    '/student',
-    studentPage
-);
+/**
+ * Demo
+ */
+router.get('/demo', addDemoHeaders, demoPage);
 
-router.get(
-'/catalog',
-catalogPage
-);
-
-router.get(
-'/catalot/:courseId',
-courseDetailPage
-);
-
-router.get(
-'/demo',
-addDemoHeaders,
-demoPage
-);
+/**
+ * Error Test
+ */
+router.get('/test-error', testErrorPage);
 
 export default router;

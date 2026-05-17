@@ -1,0 +1,35 @@
+<%- include('../partials/header') %>
+
+<main class="faculty-list">
+
+<h1>Faculty Directory</h1>
+
+<p>
+Sort by:
+<a href="/faculty?sort=name">Name</a> |
+<a href="/faculty?sort=department">Department</a> |
+<a href="/faculty?sort=title">Title</a>
+</p>
+
+<ul class="faculty-grid">
+
+<% faculty.forEach(member => { %>
+
+<li class="faculty-card">
+
+<a href="/faculty/<%= member.id %>">
+    <h2><%= member.name %></h2>
+</a>
+
+<p><strong>Department:</strong> <%= member.department %></p>
+<p><strong>Title:</strong> <%= member.title %></p>
+
+</li>
+
+<% }) %>
+
+</ul>
+
+</main>
+
+<%- include('../partials/footer') %>
