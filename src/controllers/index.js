@@ -27,8 +27,7 @@ const studentPage =
     const student = {
         name: "Jacquelyn Kulmus",
         id: "12345",
-        email: "name@example.com",
-        address: "123 University Way"
+        email: "name@example.com"
     };
     res.render(
         'student',
@@ -39,17 +38,9 @@ const studentPage =
     );
 };
 
-const testErrorPage =
-(req,res,next)=>{
-    const err = new Error('This is a test error');
-    err.status = 500;
-    next(err);
-};
-
 export {
     homePage,
     aboutPage,
     demoPage,
-    studentPage,
-    testErrorPage
+    studentPage
 };
