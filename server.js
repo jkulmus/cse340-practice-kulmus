@@ -48,10 +48,7 @@ app.use(
 addLocalVariables
 );
 
-app.use(
-"/",
-routes
-);
+app.use('/', routes);
 
 app.use(
 (req,res,next)=>{
@@ -78,6 +75,8 @@ status
 { title: status===404 ? "Not Found" : "Server Error",
 error:
 err.message,
+stack:
+err.stack,
 NODE_ENV
 }
 );
