@@ -46,7 +46,7 @@ catalogPage
 );
 
 router.get(
-'/catalot/:courseId',
+'/catalog/:courseId',
 courseDetailPage
 );
 
