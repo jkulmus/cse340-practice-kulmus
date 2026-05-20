@@ -33,14 +33,14 @@ app.use(addLocalVariables);
 app.use('/', routes);
 
 // 404 handler
-app.use((req,res,next) => {
+app.use((req, res, next) => {
     const err = new Error("Page Not Found");
     err.status = 404;
     next(err);
 });
 
 // Error handler
-app.use((err,req,res,next) => {
+app.use((err, req, res, next) => {
     const status = err.status || 500;
     const template = status === 404 ? "404" : "500";
 
