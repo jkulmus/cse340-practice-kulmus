@@ -1,29 +1,22 @@
-import {
-Router
-}
-from 'express';
+import { Router } from 'express';
+import { addDemoHeaders } from '../middleware/demo/headers.js';
 
-import {
-homePage,
-aboutPage,
-demoPage,
-studentPage
-}
-from './index.js';
+import { catalogPage, courseDetailPage } from './catalog/catalog.js';
+import { 
+    facultyListPage, 
+    facultyDetailPage 
+} 
+from './faculty/faculty.js';
 
-import {
-catalogPage,
-courseDetailPage
-}
-from './catalog/catalog.js';
+import { 
+    homePage, 
+    aboutPage, 
+    demoPage, 
+    studentPage,
+    testErrorPage 
+} from './index.js';
 
-import {
-addDemoHeaders
-}
-from '../middleware/demo/headers.js';
-
-const router =
-Router();
+const router = Router();
 
 router.get(
 '/',
@@ -46,7 +39,7 @@ catalogPage
 );
 
 router.get(
-'/catalog/:courseId',
+'/catalot/:courseId',
 courseDetailPage
 );
 
