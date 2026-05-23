@@ -3,6 +3,7 @@ import "dotenv/config";
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
+import { setupDatabase, testConnection } from "./src/models/setup.js";
 
 import routes from "./src/controllers/routes.js";
 import { addLocalVariables } from "./src/middleware/global.js";
@@ -52,6 +53,9 @@ app.use((err, req, res, next) => {
     });
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
+    await setupDatabase();
+    await testConnection();
+    
     console.log(`Server:http://localhost:${PORT}`);
 });
