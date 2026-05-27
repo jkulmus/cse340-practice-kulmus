@@ -1,0 +1,36 @@
+<%- include('../../partials/header') %>
+
+<link rel="stylesheet" href="/css/contact.css">
+
+<section class="contact-page">
+
+    <h1>Contact Form Responses</h1>
+
+    <% if (contactForms.length === 0) { %>
+
+        <p>No contact form submissions yet.</p>
+
+    <% } else { %>
+
+        <% contactForms.forEach(function(form) { %>
+
+            <article class="response-card">
+
+                <h2><%= form.subject %></h2>
+
+                <p><%= form.message %></p>
+
+                <small>
+                    Submitted:
+                    <%= new Date(form.submitted).toLocaleString() %>
+                </small>
+
+            </article>
+
+        <% }); %>
+
+    <% } %>
+
+</section>
+
+<%- include('../../partials/footer') %>

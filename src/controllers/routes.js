@@ -12,6 +12,8 @@ import {
     testErrorPage 
 } from './index.js';
 
+import contactRoutes from "./forms/contact.js";
+
 const router = Router();
 
 router.get('/', homePage);
@@ -28,5 +30,8 @@ router.get("/demo", addDemoHeaders, demoPage);
 
 // test error route
 router.get("/test-error", testErrorPage);
+
+// contact form routes
+router.use("/contact", contactRoutes);
 
 export default router;

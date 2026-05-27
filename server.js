@@ -24,13 +24,21 @@ const __dirname = path.dirname(__filename);
  */
 const app = express();
 
+// Serve static files
 app.use(express.static(path.join(__dirname, "public")));
 
+// Allow Express to receive and process POST data
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+// Setup EJS
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "src/views"));
 
+// Global Middleware
 app.use(addLocalVariables);
 
+// Routes
 app.use('/', routes);
 
 // 404 handler
@@ -53,6 +61,7 @@ app.use((err, req, res, next) => {
     });
 });
 
+// Start server
 app.listen(PORT, async () => {
     await setupDatabase();
     await testConnection();
