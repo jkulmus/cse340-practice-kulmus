@@ -13,6 +13,7 @@ import {
 } from './index.js';
 
 import contactRoutes from "./forms/contact.js";
+import registrationRoutes from "./forms/registration.js";
 
 const router = Router();
 
@@ -27,6 +28,8 @@ router.get("/faculty", facultyListPage);
 router.get("/faculty/:slugId", facultyDetailPage);
 
 router.get("/demo", addDemoHeaders, demoPage);
+
+router.use("/register", registrationRoutes);
 
 // test error route
 router.get("/test-error", testErrorPage);
