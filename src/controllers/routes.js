@@ -1,3 +1,7 @@
+import loginRoutes from "./forms/login.js";
+import { processLogout, showDashboard } from "./forms/login.js";
+import { requireLogin } from "../middleware/auth.js";
+
 import { Router } from 'express';
 import { addDemoHeaders } from '../middleware/demo/headers.js';
 
@@ -36,5 +40,12 @@ router.get("/test-error", testErrorPage);
 
 // contact form routes
 router.use("/contact", contactRoutes);
+
+// Login routes
+router.use("/login", loginRoutes);
+
+// Authentication routes
+router.get("/logout", processLogout);
+router.get("/dashboard", requireLogin, showDashboard);
 
 export default router;

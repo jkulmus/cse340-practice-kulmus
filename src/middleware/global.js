@@ -12,7 +12,7 @@ const getCurrentGreeting=()=>{
     return 'Good Evening';
 };
 
-const addLocalVariables = (req,res,next)=>{
+const addLocalVariables = (req, res, next) => {
 
     res.locals.currentYear =
         new Date().getFullYear();
@@ -39,6 +39,12 @@ const addLocalVariables = (req,res,next)=>{
             Math.random() * themes.length
         )
     ];
+
+    res.locals.isLoggedIn = false;
+
+    if (req.session && req.session.user) {
+        res.locals.isLoggedIn = true;
+    }
 
     next();
 
