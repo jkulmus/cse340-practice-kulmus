@@ -95,7 +95,8 @@ const showAllUsers = async (req, res) => {
 
     res.render("forms/registration/list", {
         title: "Registered Users",
-        users
+        users,
+        currentUser: req.session && req.session.user ? req.session.user : null
     });
 };
 

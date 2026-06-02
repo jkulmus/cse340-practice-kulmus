@@ -7,4 +7,23 @@ const requireLogin = (req, res, next) => {
     }
 };
 
-export { requireLogin };
+const requireRole = (roleName) => {
+    return (req, res, next) => {
+        if (
+            req.session &&
+            req.session.user &&
+            req.session.user.role_name === roleName
+        ) {
+            next();
+        } else {
+            req.flash(
+                "error",
+                "You do not have permission to access that resource"
+            );
+
+            res.redirect("/dashboard");
+        }
+    };
+};
+
+export { requireLogin, requireRole };
