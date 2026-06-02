@@ -35,7 +35,10 @@ const processLogin = async (req, res) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-        console.error("Validation errors:", errors.array());
+        errors.array().forEach(error => {
+            req.flash("error", error.msg);
+        });
+
         return res.redirect("/login");
     }
 
@@ -45,8 +48,8 @@ const processLogin = async (req, res) => {
         const user = await findUserByEmail(email);
 
         if (!user) {
-            console.log("User not found");
-            return res.status(401).redirect("/login");
+            req.flash("error", "Invalid email or password");
+            return res.redirect("/login");
         }
 
         const validPassword = await verifyPassword(
@@ -55,19 +58,21 @@ const processLogin = async (req, res) => {
         );
 
         if (!validPassword) {
-            console.log("Invalid password");
-            return res.status(401).redirect("/login");
+            req.flash("error", "Invalid email or password");
+            return res.redirect("/login");
         }
 
-        // Remove password before storing in session
         delete user.password;
 
         req.session.user = user;
 
+        req.flash("success", `Welcome back, ${user.name}!`);
         res.redirect("/dashboard");
 
     } catch (error) {
         console.error("Login error:", error);
+
+        req.flash("error", "Unable to log in. Please try again later.");
         res.redirect("/login");
     }
 };
