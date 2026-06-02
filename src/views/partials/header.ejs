@@ -16,8 +16,26 @@
                 <li><a href="/student">Student</a></li>
                 <li><a href="/catalog">Course Catalog</a></li>
                 <li><a href="/faculty">Faculty Directory</a></li>
+                <li><a href="/contact">Contact</a></li>
                 <li><a href="/register">Register</a></li>
                 <li><a href="/register/list">Users</a></li>
             </ul>
         </nav>
     </header>
+
+    <% 
+        const messages = flash();
+        const hasMessages = Object.values(messages).some(arr => arr.length > 0);
+    %>
+
+    <% if (hasMessages) { %>
+        <div class="flash-messages">
+            <% Object.keys(messages).forEach(type => { %>
+                <% messages[type].forEach(message => { %>
+                    <div class="flash <%= type %>">
+                        <%= message %>
+                    </div>
+                <% }); %>
+            <% }); %>
+        </div>
+    <% } %>

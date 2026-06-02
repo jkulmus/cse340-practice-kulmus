@@ -57,3 +57,41 @@ html, body {
         color: #666;
     }
 }
+
+/* Flash Messages */
+.flash-messages {
+    max-width: 800px;
+    margin: 1rem auto;
+
+    .flash {
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border-radius: 5px;
+        border-left: 5px solid;
+        font-weight: bold;
+
+        &.success {
+            background-color: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+
+        &.error {
+            background-color: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+
+        &.warning {
+            background-color: #fff3cd;
+            border-color: #ffc107;
+            color: #856404;
+        }
+
+        &.info {
+            background-color: #d1ecf1;
+            border-color: #17a2b8;
+            color: #0c5460;
+        }
+    }
+}
