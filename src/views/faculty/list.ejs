@@ -17,12 +17,18 @@ Sort by:
 
 <li class="faculty-card">
 
-<a href="/faculty/<%= member.slug %>">
-    <h2><%= member.name %></h2>
-</a>
+    <img
+        src="/images/faculty/<%= member.slug %>.jpg"
+        alt="<%= member.name %>"
+        class="faculty-photo"
+    >
 
-<p><strong>Department:</strong> <%= member.department %></p>
-<p><strong>Title:</strong> <%= member.title %></p>
+    <a href="/faculty/<%= member.slug %>">
+        <h2><%= member.name %></h2>
+    </a>
+
+    <p><strong>Department:</strong> <%= member.department %></p>
+    <p><strong>Title:</strong> <%= member.title %></p>
 
 </li>
 
