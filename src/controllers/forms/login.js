@@ -5,18 +5,12 @@ import { Router } from "express";
 
 const router = Router();
 
-/**
- * Display the login form
- */
 const showLoginForm = (req, res) => {
   res.render("forms/login/form", {
     title: "User Login",
   });
 };
 
-/**
- * Process login form submission
- */
 const processLogin = async (req, res) => {
   const errors = validationResult(req);
 
@@ -53,15 +47,11 @@ const processLogin = async (req, res) => {
     res.redirect("/dashboard");
   } catch (error) {
     console.error("Login error:", error);
-
     req.flash("error", "Unable to log in. Please try again later.");
     res.redirect("/login");
   }
 };
 
-/**
- * Logout
- */
 const processLogout = (req, res) => {
   if (!req.session) {
     return res.redirect("/");
@@ -79,25 +69,12 @@ const processLogout = (req, res) => {
   });
 };
 
-/**
- * Dashboard
- */
 const showDashboard = (req, res) => {
   const user = req.session.user;
-  const sessionData = req.session;
-
-  if (user && user.password) {
-    delete user.password;
-  }
-
-  if (sessionData.user && sessionData.user.password) {
-    delete sessionData.user.password;
-  }
 
   res.render("dashboard", {
     title: "Dashboard",
     user,
-    sessionData,
   });
 };
 

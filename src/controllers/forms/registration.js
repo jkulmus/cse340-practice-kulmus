@@ -1,6 +1,9 @@
 import { Router } from "express";
 import { validationResult } from "express-validator";
-import { editValidation, registrationValidation } from "../../middleware/validation/forms.js";
+import {
+  editValidation,
+  registrationValidation,
+} from "../../middleware/validation/forms.js";
 import { requireLogin } from "../../middleware/auth.js";
 import bcrypt from "bcrypt";
 import {
@@ -42,13 +45,13 @@ const processRegistration = async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
+
     await saveUser(name, email, hashedPassword);
 
     req.flash("success", "Registration successful! You can now log in.");
     res.redirect("/login");
   } catch (error) {
     console.error("Error registering user:", error);
-
     req.flash("error", "Unable to create your account. Please try again later.");
     res.redirect("/register");
   }
@@ -66,7 +69,7 @@ const showAllUsers = async (req, res) => {
   res.render("forms/registration/list", {
     title: "Registered Users",
     users,
-    currentUser: req.session && req.session.user ? req.session.user : null,
+    currentUser: req.session?.user || null,
   });
 };
 
@@ -124,8 +127,9 @@ const processEditAccount = async (req, res) => {
     }
 
     const emailTaken = await emailExists(email);
+    const emailChanged = targetUser.email.toLowerCase() !== email.toLowerCase();
 
-    if (emailTaken && targetUser.email !== email) {
+    if (emailTaken && emailChanged) {
       req.flash("error", "An account with that email already exists.");
       return res.redirect(`/register/${targetUserId}/edit`);
     }
@@ -141,7 +145,6 @@ const processEditAccount = async (req, res) => {
     res.redirect("/register/list");
   } catch (error) {
     console.error("Error updating user:", error);
-
     req.flash("error", "Unable to update account. Please try again later.");
     res.redirect(`/register/${targetUserId}/edit`);
   }
@@ -171,7 +174,6 @@ const processDeleteAccount = async (req, res) => {
     }
   } catch (error) {
     console.error("Error deleting user:", error);
-
     req.flash("error", "Unable to delete account. Please try again later.");
   }
 
@@ -180,7 +182,7 @@ const processDeleteAccount = async (req, res) => {
 
 router.get("/", showRegistrationForm);
 router.post("/", registrationValidation, processRegistration);
-router.get("/list", showAllUsers);
+router.get("/list", requireLogin, showAllUsers);
 router.get("/:id/edit", requireLogin, showEditAccountForm);
 router.post("/:id/edit", requireLogin, editValidation, processEditAccount);
 router.post("/:id/delete", requireLogin, processDeleteAccount);
