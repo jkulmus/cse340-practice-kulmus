@@ -21,7 +21,25 @@
   box-shadow: var(--shadow-sm);
 }
 
-.response-subject { color: var(--primary); margin: 0 0 1rem 0; font-size: 1.25rem; }
-.response-message { color: var(--text); line-height: 1.6; margin: 0 0 1rem 0; white-space: pre-wrap; }
-.response-date { color: var(--text-light); font-size: 0.875rem; margin: 0; }
-.no-responses { text-align: center; color: var(--text-light); font-style: italic; padding: 2rem; }
+.response-subject {
+  color: var(--primary);
+  margin: 0 0 1rem 0;
+  font-size: 1.25rem;
+}
+.response-message {
+  color: var(--text);
+  line-height: 1.6;
+  margin: 0 0 1rem 0;
+  white-space: pre-wrap;
+}
+.response-date {
+  color: var(--text-light);
+  font-size: 0.875rem;
+  margin: 0;
+}
+.no-responses {
+  text-align: center;
+  color: var(--text-light);
+  font-style: italic;
+  padding: 2rem;
+}

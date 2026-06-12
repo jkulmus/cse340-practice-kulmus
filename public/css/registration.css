@@ -25,7 +25,9 @@
   border-radius: var(--radius);
   padding: 1.5rem;
   box-shadow: var(--shadow-sm);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .user-card:hover {
@@ -58,8 +60,12 @@
   font-weight: 500;
 }
 
-.detail-item { margin-bottom: 0.75rem; }
-.detail-item:last-child { margin-bottom: 0; }
+.detail-item {
+  margin-bottom: 0.75rem;
+}
+.detail-item:last-child {
+  margin-bottom: 0;
+}
 
 .detail-item .label {
   font-weight: 500;
@@ -92,7 +98,9 @@
   font: inherit;
   text-decoration: none;
   cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 .user-actions a:hover {
@@ -119,8 +127,11 @@
 }
 
 @media (max-width: 768px) {
-  .users-list { grid-template-columns: 1fr; }
-  .user-header, .user-actions {
+  .users-list {
+    grid-template-columns: 1fr;
+  }
+  .user-header,
+  .user-actions {
     flex-direction: column;
     align-items: flex-start;
   }

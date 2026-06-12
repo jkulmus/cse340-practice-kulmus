@@ -14,7 +14,9 @@
   padding: 18px;
   box-shadow: var(--shadow-sm);
   text-align: center;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .faculty-card:hover {
@@ -22,9 +24,18 @@
   box-shadow: var(--shadow-md);
 }
 
-.faculty-card h2 { margin-top: 10px; color: var(--primary); }
-.faculty-card a { color: var(--primary); font-weight: 600; text-decoration: none; }
-.faculty-card a:hover { text-decoration: underline; }
+.faculty-card h2 {
+  margin-top: 10px;
+  color: var(--primary);
+}
+.faculty-card a {
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+.faculty-card a:hover {
+  text-decoration: underline;
+}
 
 .faculty-photo {
   width: 100%;
@@ -47,7 +58,9 @@
   box-shadow: var(--shadow-sm);
 }
 
-.faculty-detail { text-align: center; }
+.faculty-detail {
+  text-align: center;
+}
 
 .faculty-info {
   text-align: left;
