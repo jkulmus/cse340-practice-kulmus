@@ -1,128 +1,103 @@
-/* Course catalog styles using native CSS nesting */
 .course-list {
-    display: grid;
-    gap: 1.5rem;
-    max-width: 800px;
-    margin: 0 auto;
-    .course-card {
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        padding: 1.5rem;
-        background: #fff;
-        transition: box-shadow 0.2s ease;
-        &:hover {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        h3 {
-            margin: 0 0 0.5rem 0;
-            a {
-                color: #2c5aa0;
-                text-decoration: none;
-                &:hover {
-                    text-decoration: underline;
-                }
-            }
-        }
-        .course-id {
-            color: #666;
-            font-weight: 500;
-            margin: 0 0 1rem 0;
-        }
-        .course-description {
-            color: #444;
-            line-height: 1.5;
-            margin: 0;
-        }
-    }
+  display: grid;
+  gap: 1.5rem;
+  max-width: 800px;
+  margin: 0 auto;
 }
+
+.course-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.course-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.course-card h3 { margin: 0 0 0.5rem 0; }
+.course-card h3 a { color: var(--primary); text-decoration: none; }
+.course-card h3 a:hover { text-decoration: underline; }
+
+.course-id {
+  color: var(--text-light);
+  font-weight: 500;
+  margin: 0 0 1rem 0;
+}
+
+.course-description {
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
 .course-header {
-    max-width: 800px;
-    margin: 0 auto 2rem auto;
-    text-align: center;
-    h1 {
-        color: #2c5aa0;
-        margin-bottom: 0.5rem;
-    }
-    .course-meta {
-        color: #666;
-        font-weight: 500;
-        margin: 0 0 1rem 0;
-    }
-    .course-description {
-        color: #444;
-        line-height: 1.6;
-        font-size: 1.1rem;
-    }
+  max-width: 800px;
+  margin: 0 auto 2rem auto;
+  text-align: center;
 }
+
+.course-header h1 { color: var(--primary); margin-bottom: 0.5rem; }
+.course-meta { color: var(--text-light); font-weight: 500; margin: 0 0 1rem 0; }
+.course-header .course-description { font-size: 1.1rem; }
+
 .sections {
-    max-width: 800px;
-    margin: 0 auto;
-    .sections-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 1.5rem;
-        border-bottom: 2px solid #2c5aa0;
-        padding-bottom: 0.5rem;
-        h2 {
-            margin: 0;
-            color: #2c5aa0;
-        }
-        .sort-options {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-            span {
-                color: #666;
-                font-weight: 500;
-            }
-            a {
-                color: #2c5aa0;
-                text-decoration: none;
-                padding: 0.25rem 0.5rem;
-                border-radius: 4px;
-                &:hover {
-                    background: #f0f4f8;
-                }
-                &.active {
-                    background: #2c5aa0;
-                    color: white;
-                }
-            }
-        }
-    }
-    .section-list {
-        display: grid;
-        gap: 1rem;
-        .section-card {
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            padding: 1rem;
-            background: #f9f9f9;
-            .section-time {
-                font-weight: bold;
-                color: #2c5aa0;
-                font-size: 1.1rem;
-                margin-bottom: 0.5rem;
-            }
-            .section-room,
-            .section-professor {
-                color: #555;
-                margin-bottom: 0.25rem;
-            }
-        }
-    }
+  max-width: 800px;
+  margin: 0 auto;
 }
-.navigation {
-    max-width: 800px;
-    margin: 2rem auto 0 auto;
-    text-align: center;
-    a {
-        color: #2c5aa0;
-        text-decoration: none;
-        font-weight: 500;
-        &:hover {
-            text-decoration: underline;
-        }
-    }
+
+.sections-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--primary);
+  padding-bottom: 0.5rem;
+}
+
+.sections-header h2 { margin: 0; color: var(--primary); }
+
+.sort-options {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.sort-options span { color: var(--text-light); font-weight: 500; }
+.sort-options a {
+  color: var(--primary);
+  text-decoration: none;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.sort-options a:hover { background: #f0f4f8; }
+.sort-options a.active { background: var(--primary); color: white; }
+
+.section-list { display: grid; gap: 1rem; }
+
+.section-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  background: var(--surface-alt);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.section-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+.section-time { font-weight: bold; color: var(--primary); font-size: 1.1rem; margin-bottom: 0.5rem; }
+.section-room, .section-professor { color: #555; margin-bottom: 0.25rem; }
+
+.navigation { max-width: 800px; margin: 2rem auto 0 auto; text-align: center; }
+.navigation a { color: var(--primary); text-decoration: none; font-weight: 500; }
+.navigation a:hover { text-decoration: underline; }
+
+@media (max-width: 768px) {
+  .sections-header { align-items: flex-start; flex-direction: column; }
 }

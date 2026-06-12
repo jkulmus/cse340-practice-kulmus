@@ -1,97 +1,226 @@
-html, body {
-    background-color: lightblue;
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 20px;
+:root {
+  --primary: #0066cc;
+  --primary-dark: #004f99;
 
-    & main {
-        max-width: 800px;
-        margin: 40px auto;
-        background: white;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  --success: #28a745;
+  --success-bg: #d4edda;
+  --success-text: #155724;
+  
+  --danger: #dc3545;
+  --danger-bg: #f8d7da;
+  --danger-text: #721c24;
 
-        & h1 {
-            color: #333;
-            border-bottom: 2px solid #0066cc;
-            padding-bottom: 10px;
-        }
-    }
+  --warning: #ffc107;
+  --warning-bg: #fff3cd;
+  --warning-text: #856404;
 
-    & header {
-        nav {
-            margin-bottom: 20px;
+  --info: #17a2b8;
+  --info-bg: #d1ecf1;
+  --info-text: #0c5460;
 
-            ul {
-                list-style-type: none;
-                padding: 0;
-                margin: 0;
+  --background: #c6e4ef;
+  --surface: #ffffff;
+  --surface-alt: #f9f9f9;
 
-                li {
-                    display: inline;
-                    margin-right: 15px;
+  --text: #333333;
+  --text-light: #666666;
+  --text-muted: #444444;
 
-                    a {
-                        text-decoration: none;
-                        color: #333;
-                        font-weight: bold;
-                        padding: 5px 10px;
-                        transition: all 0.3s ease;
+  --border: #dddddd;
+  --border-focus: rgba(44, 90, 160, 0.3);
 
-                        &:hover {
-                            background-color: #0066cc;
-                            color: white;
-                            border-radius: 5px;
-                        }
-                    }
-                }
-            }
-        }
-    }
+  --shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.15);
 
-    & footer {
-        text-align: center;
-        margin-top: 30px;
-        font-size: 0.8em;
-        color: #666;
-    }
+  --radius: 8px;
+  --radius-sm: 6px;
 }
 
-/* Flash Messages */
-.flash-messages {
-    max-width: 800px;
-    margin: 1rem auto;
+* {
+  box-sizing: border-box;
+}
 
-    .flash {
-        padding: 1rem;
-        margin-bottom: 1rem;
-        border-radius: 5px;
-        border-left: 5px solid;
-        font-weight: bold;
+/* Sticky Footer Setup */
+html, body {
+  height: 100%;
+}
 
-        &.success {
-            background-color: #d4edda;
-            border-color: #28a745;
-            color: #155724;
-        }
+body {
+  background-color: var(--background);
+  color: var(--text);
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+}
 
-        &.error {
-            background-color: #f8d7da;
-            border-color: #dc3545;
-            color: #721c24;
-        }
+main {
+  flex: 1 0 auto; /* Pushes footer to the absolute bottom on short pages */
+  width: 100%;
+  max-width: 800px;
+  margin: 40px auto;
+  background: var(--surface);
+  padding: 24px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
 
-        &.warning {
-            background-color: #fff3cd;
-            border-color: #ffc107;
-            color: #856404;
-        }
+h1 {
+  color: var(--text);
+  border-bottom: 2px solid var(--primary);
+  padding-bottom: 10px;
+}
 
-        &.info {
-            background-color: #d1ecf1;
-            border-color: #17a2b8;
-            color: #0c5460;
-        }
-    }
+a {
+  color: var(--primary);
+}
+
+/* Navigation Layout */
+header nav {
+  max-width: 1100px;
+  margin: 0 auto 20px auto;
+  background: var(--surface);
+  padding: 1rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+
+header nav ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+header nav li {
+  display: inline-block;
+  margin-right: 15px;
+}
+
+header nav a {
+  text-decoration: none;
+  color: var(--text);
+  font-weight: bold;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+header nav a:hover,
+header nav a:focus-visible {
+  background-color: var(--primary);
+  color: white;
+  outline: none;
+}
+
+footer {
+  flex-shrink: 0;
+  text-align: center;
+  margin-top: 30px;
+  padding: 1rem 0;
+  font-size: 0.85rem;
+  color: var(--text-light);
+}
+
+/* Shared Core Form Components */
+.form-card,
+.registration-form,
+.login-form,
+.contact-form {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+}
+
+.login-form { max-width: 500px; } 
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--text);
+}
+
+input, textarea, select {
+  font: inherit;
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Accessible, clean focus states */
+input:focus, textarea:focus, select:focus {
+  outline: 2px solid transparent; 
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--border-focus);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 150px;
+}
+
+/* Universal Button Styles */
+button[type="submit"] {
+  width: 100%;
+  padding: 1rem;
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+button[type="submit"]:hover:not(:disabled) {
+  background-color: var(--primary-dark);
+}
+
+button[type="submit"]:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+button[type="submit"]:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+/* Shared Flash/Auth System Messages */
+.flash-messages, .auth-message {
+  max-width: 900px;
+  margin: 1rem auto;
+}
+
+.flash, .auth-message {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: var(--radius);
+  border-left: 5px solid;
+  font-weight: bold;
+}
+
+.flash.success, .auth-message.success { background-color: var(--success-bg); border-color: var(--success); color: var(--success-text); }
+.flash.error, .auth-message.error     { background-color: var(--danger-bg); border-color: var(--danger); color: var(--danger-text); }
+.flash.warning, .auth-message.warning { background-color: var(--warning-bg); border-color: var(--warning); color: var(--warning-text); }
+.flash.info, .auth-message.info       { background-color: var(--info-bg); border-color: var(--info); color: var(--info-text); }
+
+/* Global Breakpoints */
+@media (max-width: 768px) {
+  body { padding: 12px; }
+  main { margin: 20px auto; padding: 18px; }
+  header nav li { display: block; margin: 0.35rem 0; }
+  header nav a { display: block; }
 }

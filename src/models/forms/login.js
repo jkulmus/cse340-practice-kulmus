@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import db from "../db.js";
 
 const findUserByEmail = async (email) => {
-    const query = `
+  const query = `
         SELECT
             u.id,
             u.name,
@@ -18,13 +18,13 @@ const findUserByEmail = async (email) => {
         LIMIT 1
     `;
 
-    const result = await db.query(query, [email]);
+  const result = await db.query(query, [email]);
 
-    return result.rows[0] || null;
+  return result.rows[0] || null;
 };
 
 const verifyPassword = async (plainPassword, hashedPassword) => {
-    return await bcrypt.compare(plainPassword, hashedPassword);
+  return await bcrypt.compare(plainPassword, hashedPassword);
 };
 
 export { findUserByEmail, verifyPassword };

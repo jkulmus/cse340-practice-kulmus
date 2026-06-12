@@ -1,41 +1,41 @@
 import db from "../db.js";
 
 const emailExists = async (email) => {
-    const query = `
+  const query = `
         SELECT EXISTS(SELECT 1 FROM users WHERE email = $1) as exists
     `;
 
-    const result = await db.query(query, [email]);
+  const result = await db.query(query, [email]);
 
-    return result.rows[0].exists;
+  return result.rows[0].exists;
 };
 
 const saveUser = async (name, email, hashedPassword) => {
-    const query = `
+  const query = `
         INSERT INTO users (name, email, password)
         VALUES ($1, $2, $3)
         RETURNING id, name, email, created_at
     `;
 
-    const result = await db.query(query, [name, email, hashedPassword]);
+  const result = await db.query(query, [name, email, hashedPassword]);
 
-    return result.rows[0];
+  return result.rows[0];
 };
 
 const getAllUsers = async () => {
-    const query = `
+  const query = `
         SELECT id, name, email, created_at
         FROM users
         ORDER BY created_at DESC
     `;
 
-    const result = await db.query(query);
+  const result = await db.query(query);
 
-    return result.rows;
+  return result.rows;
 };
 
 const getUserById = async (id) => {
-    const query = `
+  const query = `
         SELECT
             u.id,
             u.name,
@@ -48,13 +48,13 @@ const getUserById = async (id) => {
         WHERE u.id = $1
     `;
 
-    const result = await db.query(query, [id]);
+  const result = await db.query(query, [id]);
 
-    return result.rows[0] || null;
+  return result.rows[0] || null;
 };
 
 const updateUser = async (id, name, email) => {
-    const query = `
+  const query = `
         UPDATE users
         SET name = $1,
             email = $2,
@@ -63,27 +63,20 @@ const updateUser = async (id, name, email) => {
         RETURNING id, name, email, updated_at
     `;
 
-    const result = await db.query(query, [name, email, id]);
+  const result = await db.query(query, [name, email, id]);
 
-    return result.rows[0] || null;
+  return result.rows[0] || null;
 };
 
 const deleteUser = async (id) => {
-    const query = `
+  const query = `
         DELETE FROM users
         WHERE id = $1
     `;
 
-    const result = await db.query(query, [id]);
+  const result = await db.query(query, [id]);
 
-    return result.rowCount > 0;
+  return result.rowCount > 0;
 };
 
-export {
-    emailExists,
-    saveUser,
-    getAllUsers,
-    getUserById,
-    updateUser,
-    deleteUser
-};
+export { emailExists, saveUser, getAllUsers, getUserById, updateUser, deleteUser };

@@ -40,30 +40,30 @@ const pgSession = connectPgSimple(session);
  * Configure session middleware
  */
 app.use(
-    session({
-        store: new pgSession({
-            conObject: {
-                connectionString: process.env.DB_URL,
-                ssl: {
-                    ca: caCert,
-                    rejectUnauthorized: true,
-                    checkServerIdentity: () => {
-                        return undefined;
-                    }
-                }
-            },
-            tableName: "session",
-            createTableIfMissing: true
-        }),
-        secret: process.env.SESSION_SECRET,
-        resave: false,
-        saveUninitialized: false,
-        cookie: {
-            secure: NODE_ENV.includes("dev") !== true,
-            httpOnly: true,
-            maxAge: 24 * 60 * 60 * 1000
-        }
-    })
+  session({
+    store: new pgSession({
+      conObject: {
+        connectionString: process.env.DB_URL,
+        ssl: {
+          ca: caCert,
+          rejectUnauthorized: true,
+          checkServerIdentity: () => {
+            return undefined;
+          },
+        },
+      },
+      tableName: "session",
+      createTableIfMissing: true,
+    }),
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: NODE_ENV.includes("dev") !== true,
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+    },
+  }),
 );
 
 /**
@@ -87,32 +87,32 @@ app.use(addLocalVariables);
 app.use(flash);
 
 // Routes
-app.use('/', routes);
+app.use("/", routes);
 
 // 404 handler
 app.use((req, res, next) => {
-    const err = new Error("Page Not Found");
-    err.status = 404;
-    next(err);
+  const err = new Error("Page Not Found");
+  err.status = 404;
+  next(err);
 });
 
 // Error handler
 app.use((err, req, res, next) => {
-    const status = err.status || 500;
-    const template = status === 404 ? "404" : "500";
+  const status = err.status || 500;
+  const template = status === 404 ? "404" : "500";
 
-    res.status(status).render(`errors/${template}`,{ 
-        title: status===404 ? "Not Found" : "Server Error",
-        error: err.message,
-        stack: err.stack,
-        NODE_ENV
-    });
+  res.status(status).render(`errors/${template}`, {
+    title: status === 404 ? "Not Found" : "Server Error",
+    error: err.message,
+    stack: err.stack,
+    NODE_ENV,
+  });
 });
 
 // Start server
 app.listen(PORT, async () => {
-    await setupDatabase();
-    await testConnection();
-    
-    console.log(`Server:http://localhost:${PORT}`);
+  await setupDatabase();
+  await testConnection();
+
+  console.log(`Server:http://localhost:${PORT}`);
 });
