@@ -28,13 +28,13 @@ const handleContactSubmission = async (req, res) => {
         return res.redirect('/contact');
     }
 
-    const { subject, message } = req.body;
+    const { subject, email, message } = req.body;
 
     try {
-        await createContactForm(subject, message);
+        await createContactForm(subject, message, email || null);
 
         req.flash('success', 'Thank you for contacting us! We will respond soon.');
-        res.redirect('/contact');
+        res.redirect('/contact/responses');
 
     } catch (error) {
         console.error('Error saving contact form:', error);

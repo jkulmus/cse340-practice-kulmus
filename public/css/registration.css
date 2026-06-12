@@ -61,6 +61,11 @@
             cursor: not-allowed;
         }
     }
+    .cancel-link {
+        display: block;
+        margin-top: 1rem;
+        text-align: center;
+    }
 }
 /* Users List Styles */
 .users-list {
@@ -116,6 +121,29 @@
                     color: #333;
                     font-size: 1rem;
                 }
+            }
+        }
+        .user-actions {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #ddd;
+            a,
+            button {
+                padding: 0.5rem 0.75rem;
+                border: 1px solid #2c5aa0;
+                border-radius: 6px;
+                background-color: #fff;
+                color: #2c5aa0;
+                font: inherit;
+                text-decoration: none;
+                cursor: pointer;
+            }
+            button {
+                border-color: #dc3545;
+                color: #dc3545;
             }
         }
     }

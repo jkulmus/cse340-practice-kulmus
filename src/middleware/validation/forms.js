@@ -7,6 +7,15 @@ const contactValidation = [
         .withMessage("Subject must be between 2 and 255 characters")
         .matches(/^[a-zA-Z0-9\s\-.,!?]+$/)
         .withMessage("Subject contains invalid characters"),
+
+    body("email")
+        .trim()
+        .optional({ checkFalsy: true })
+        .isEmail()
+        .withMessage("Must be a valid email address")
+        .normalizeEmail()
+        .isLength({ max: 255 })
+        .withMessage("Email address is too long"),
     
     body("message")
         .trim()
@@ -62,6 +71,23 @@ const registrationValidation = [
         .withMessage("Passwords must match")
 ];
 
+const editValidation = [
+    body("name")
+        .trim()
+        .isLength({ min: 2, max: 100 })
+        .withMessage("Name must be between 2 and 100 characters")
+        .matches(/^[a-zA-Z\s'-]+$/)
+        .withMessage("Name can only contain letters, spaces, hyphens, and apostrophes"),
+
+    body("email")
+        .trim()
+        .isEmail()
+        .withMessage("Must be a valid email address")
+        .normalizeEmail()
+        .isLength({ max: 255 })
+        .withMessage("Email address is too long")
+];
+
 const loginValidation = [
     body("email")
         .trim()
@@ -81,5 +107,6 @@ const loginValidation = [
 export {
     contactValidation,
     registrationValidation,
+    editValidation,
     loginValidation
 };

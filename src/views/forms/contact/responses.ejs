@@ -20,6 +20,13 @@
 
                 <p><%= form.message %></p>
 
+                <% if (form.email) { %>
+                    <p>
+                        <strong>Email:</strong>
+                        <%= form.email %>
+                    </p>
+                <% } %>
+
                 <small>
                     Submitted:
                     <%= new Date(form.submitted).toLocaleString() %>

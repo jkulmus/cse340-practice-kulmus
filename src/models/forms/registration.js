@@ -34,4 +34,56 @@ const getAllUsers = async () => {
     return result.rows;
 };
 
-export { emailExists, saveUser, getAllUsers };
+const getUserById = async (id) => {
+    const query = `
+        SELECT
+            u.id,
+            u.name,
+            u.email,
+            u.created_at,
+            r.role_name
+        FROM users u
+        LEFT JOIN roles r
+            ON u.role_id = r.id
+        WHERE u.id = $1
+    `;
+
+    const result = await db.query(query, [id]);
+
+    return result.rows[0] || null;
+};
+
+const updateUser = async (id, name, email) => {
+    const query = `
+        UPDATE users
+        SET name = $1,
+            email = $2,
+            updated_at = CURRENT_TIMESTAMP
+        WHERE id = $3
+        RETURNING id, name, email, updated_at
+    `;
+
+    const result = await db.query(query, [name, email, id]);
+
+    return result.rows[0] || null;
+};
+
+const deleteUser = async (id) => {
+    const query = `
+        DELETE FROM users
+        WHERE id = $1
+    `;
+
+    const result = await db.query(query, [id]);
+
+    return result.rowCount > 0;
+};
+
+export {
+    emailExists,
+    saveUser,
+    getAllUsers,
+    getUserById,
+    updateUser,
+    deleteUser
+};
